@@ -4,8 +4,10 @@ import 'package:studentdbgetx/model/student_model.dart';
 
 class StateManager extends GetxController {
   RxList<StudentModel> studentListRx = <StudentModel>[].obs;
+  RxString studentImage = ''.obs;
 
   final db = DB();
+
   getFromDb() async {
     final list = await db.getStudents();
     studentListRx.assignAll(list);

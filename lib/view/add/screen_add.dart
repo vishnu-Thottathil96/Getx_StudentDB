@@ -26,86 +26,98 @@ class AddScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          actions: const [
-            Padding(
-              padding: EdgeInsets.only(right: 8.0),
-              child: Icon(
-                CupertinoIcons.person_add,
-                size: 35,
-              ),
-            )
-          ],
-          backgroundColor: themeColor,
-          title: const Text('Add Student'),
-        ),
-        body: SafeArea(
-          child: Column(
-            children: [
-              kHeight10,
-              CircleAvatarWithAddButton(),
-              kHeight10,
-              Expanded(
-                child: Form(
-                  key: _formKey,
-                  child: ListView.builder(
-                    itemCount: fieldNames.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: CustomTextField(
-                          hintTextToDisplay: fieldNames[index],
-                          onSavedCallback: (value) {
-                            toSaveValues[index] = value!;
-                          },
-                        ),
-                      );
-                    },
+    return WillPopScope(
+      onWillPop: () async {
+        studentListController.studentImage.value = '';
+        return true;
+      },
+      child: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+                onPressed: () {
+                  studentListController.studentImage.value = '';
+                  Get.back();
+                },
+                icon: Icon(Icons.arrow_back)),
+            actions: const [
+              Padding(
+                padding: EdgeInsets.only(right: 8.0),
+                child: Icon(
+                  CupertinoIcons.person_add,
+                  size: 35,
+                ),
+              )
+            ],
+            backgroundColor: themeColor,
+            title: const Text('Add Student'),
+          ),
+          body: SafeArea(
+            child: Column(
+              children: [
+                kHeight10,
+                CircleAvatarWithAddButton(),
+                kHeight10,
+                Expanded(
+                  child: Form(
+                    key: _formKey,
+                    child: ListView.builder(
+                      itemCount: fieldNames.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: CustomTextField(
+                            hintTextToDisplay: fieldNames[index],
+                            onSavedCallback: (value) {
+                              toSaveValues[index] = value!;
+                            },
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: themeColor,
-          onPressed: () async {
-            if (!_formKey.currentState!.validate()) {
-              return;
-            }
-            _formKey.currentState!.save();
-            if (selectedImage.isEmpty) {
-              Get.showSnackbar(const GetSnackBar(
-                title: 'Image required',
-                message: 'Please upload an image',
-                duration: Duration(seconds: 2),
-                backgroundColor: Colors.red,
-              ));
-              return;
-            }
-            final student = StudentModel(
-              name: toSaveValues[0],
-              batch: toSaveValues[1],
-              phone: toSaveValues[2],
-              mail: toSaveValues[3],
-              address: toSaveValues[4],
-              image: selectedImage,
-            );
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: themeColor,
+            onPressed: () async {
+              if (!_formKey.currentState!.validate()) {
+                return;
+              }
+              _formKey.currentState!.save();
+              if (studentListController.studentImage.value.isEmpty) {
+                Get.showSnackbar(const GetSnackBar(
+                  title: 'Image required',
+                  message: 'Please upload an image',
+                  duration: Duration(seconds: 2),
+                  backgroundColor: Colors.red,
+                ));
+                return;
+              }
+              final student = StudentModel(
+                name: toSaveValues[0],
+                batch: toSaveValues[1],
+                phone: toSaveValues[2],
+                mail: toSaveValues[3],
+                address: toSaveValues[4],
+                image: studentListController.studentImage.value,
+              );
 
-            await studentListController.addToDb(student);
-            selectedImage = '';
-            Get.showSnackbar(const GetSnackBar(
-              title: 'Successful',
-              message: 'User Registered Successfully',
-              duration: Duration(seconds: 3),
-              backgroundColor: Colors.green,
-            ));
-            //  imageNotifier.value = 'assets/images/defaultprofile.png';
-            _formKey.currentState!.reset();
-            Navigator.pop(context);
-          },
-          child: const Icon(Icons.check),
-        ));
+              await studentListController.addToDb(student);
+              studentListController.studentImage.value = '';
+              Get.showSnackbar(const GetSnackBar(
+                title: 'Successful',
+                message: 'User Registered Successfully',
+                duration: Duration(seconds: 3),
+                backgroundColor: Colors.green,
+              ));
+              //  imageNotifier.value = 'assets/images/defaultprofile.png';
+              _formKey.currentState!.reset();
+              Navigator.pop(context);
+            },
+            child: const Icon(Icons.check),
+          )),
+    );
   }
 }

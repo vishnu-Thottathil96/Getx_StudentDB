@@ -1,6 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:studentdbgetx/constants/colors.dart';
+import 'package:studentdbgetx/view/home/screen_home.dart';
 
 XFile? pickedImage;
 
@@ -16,20 +19,22 @@ class CircleAvatarWithAddButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Container(
-          height: 150,
-          width: 150,
-          decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.amber,
-              image: selectedImage.isEmpty
-                  ? const DecorationImage(
-                      image: AssetImage('assets/images/defaultprofile.png'),
-                      fit: BoxFit.cover)
-                  : DecorationImage(
-                      image: FileImage(File(selectedImage)),
-                      fit: BoxFit.cover)),
-        ),
+        Obx(() {
+          return Container(
+            height: 150,
+            width: 150,
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: studentListController.studentImage.value.isEmpty
+                    ? const DecorationImage(
+                        image: AssetImage('assets/images/defaultprofile.png'),
+                        fit: BoxFit.cover)
+                    : DecorationImage(
+                        image: FileImage(
+                            File(studentListController.studentImage.value)),
+                        fit: BoxFit.cover)),
+          );
+        }),
         Positioned(
           bottom: -5,
           left: 90,
@@ -37,12 +42,13 @@ class CircleAvatarWithAddButton extends StatelessWidget {
             onPressed: () async {
               pickedImage = await _pickImage();
               if (pickedImage != null) {
-                selectedImage = pickedImage!.path;
+                studentListController.studentImage.value = pickedImage!.path;
               }
             },
             icon: const Icon(
               Icons.add_a_photo_outlined,
               size: 35,
+              color: themeColor,
             ),
           ),
         ),
