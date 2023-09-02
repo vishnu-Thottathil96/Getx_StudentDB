@@ -6,6 +6,7 @@ import 'package:studentdbgetx/model/student_model.dart';
 
 import 'package:studentdbgetx/view/full_details/widgets/second_section.dart';
 import 'package:studentdbgetx/view/full_details/widgets/upper_section.dart';
+import 'package:studentdbgetx/view/home/screen_home.dart';
 
 class Details extends StatelessWidget {
   const Details({
@@ -34,7 +35,7 @@ class Details extends StatelessWidget {
                   icon: const Icon(CupertinoIcons.delete_simple),
                   color: Colors.red,
                   onPressed: () async {
-                    await DB.instance.deleteStudent(student.id!);
+                    await studentListController.deleteFromDb(student.id!);
                     // ignore: use_build_context_synchronously
                     Navigator.pop(context);
                   },

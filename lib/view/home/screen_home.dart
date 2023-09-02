@@ -1,25 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:studentdbgetx/constants/colors.dart';
 import 'package:studentdbgetx/constants/screen_size.dart';
 import 'package:studentdbgetx/constants/space.dart';
-import 'package:studentdbgetx/controller/db_functions.dart';
+import 'package:studentdbgetx/controller/state_controller/state_controller.dart';
 import 'package:studentdbgetx/view/add/screen_add.dart';
 import 'package:studentdbgetx/view/home/widgets/card.dart';
 
-import '../../model/student_model.dart';
-
-ValueNotifier<List<StudentModel>> studentListNotifier = ValueNotifier([]);
+final studentListController = Get.put(StateManager());
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
-  getStudentsFromDB() async {
-    studentListNotifier.value = await DB.instance.getStudents();
-  }
 
   @override
   Widget build(BuildContext context) {
-    getStudentsFromDB();
+    studentListController.getFromDb();
     TextEditingController searchController = TextEditingController();
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -49,23 +45,22 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               kHeight20,
-              ValueListenableBuilder(
-                  valueListenable: studentListNotifier,
-                  builder: (context, value, _) {
-                    return Expanded(
-                      child: GridView.builder(
-                        itemCount: value.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          mainAxisSpacing: ScreenSize.screenHeight / 70,
-                          crossAxisSpacing: ScreenSize.screenHeight / 70,
-                          crossAxisCount: 2,
-                        ),
-                        itemBuilder: (context, index) {
-                          return CardWidget(student: value[index]);
-                        },
-                      ),
-                    );
-                  })
+              Obx(() {
+                return Expanded(
+                  child: GridView.builder(
+                    itemCount: studentListController.studentListRx.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      mainAxisSpacing: ScreenSize.screenHeight / 70,
+                      crossAxisSpacing: ScreenSize.screenHeight / 70,
+                      crossAxisCount: 2,
+                    ),
+                    itemBuilder: (context, index) {
+                      return CardWidget(
+                          student: studentListController.studentListRx[index]);
+                    },
+                  ),
+                );
+              })
             ],
           ),
         ),

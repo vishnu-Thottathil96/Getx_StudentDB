@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:studentdbgetx/constants/colors.dart';
 import 'package:studentdbgetx/constants/space.dart';
+import 'package:studentdbgetx/view/home/screen_home.dart';
 import '../../controller/db_functions.dart';
 import '../../model/student_model.dart';
 import '../../widgets/custom_textfield.dart';
@@ -131,7 +132,7 @@ class EditScreen extends StatelessWidget {
                 id: currentValues[5]);
             print('student id : ${student.id}');
 
-            await DB.instance.updateStudent(student, student.id!);
+            await studentListController.updateFromDb(student, student.id!);
             Get.showSnackbar(const GetSnackBar(
               title: 'Successful',
               message: 'Data Updated Successfully',

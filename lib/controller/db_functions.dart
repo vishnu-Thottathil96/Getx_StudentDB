@@ -7,7 +7,7 @@ class DB {
 
   static final DB instance = DB._();
 
-  factory DB() => DB._();
+  factory DB() => instance;
 
   late Database db;
 

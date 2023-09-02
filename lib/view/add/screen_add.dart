@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studentdbgetx/constants/colors.dart';
 import 'package:studentdbgetx/constants/space.dart';
-import '../../controller/db_functions.dart';
+import 'package:studentdbgetx/view/home/screen_home.dart';
 import '../../model/student_model.dart';
 import '../../widgets/circle_add.dart';
 import '../../widgets/custom_textfield.dart';
@@ -93,7 +93,7 @@ class AddScreen extends StatelessWidget {
               image: selectedImage,
             );
 
-            await DB.instance.addStudent(student);
+            await studentListController.addToDb(student);
             selectedImage = '';
             Get.showSnackbar(const GetSnackBar(
               title: 'Successful',
