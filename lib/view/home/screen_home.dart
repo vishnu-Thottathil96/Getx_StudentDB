@@ -42,10 +42,18 @@ class HomeScreen extends StatelessWidget {
                 height: ScreenSize.screenHeight / 17,
                 child: CupertinoSearchTextField(
                   controller: searchController,
+                  onChanged: (value) {
+                    if (value.isNotEmpty) {
+                      studentListController.searchHelper(value);
+                    } else {
+                      studentListController.getFromDb();
+                    }
+                  },
                 ),
               ),
               kHeight20,
-              Obx(() {
+              /*
+               Obx(() {
                 return Expanded(
                   child: GridView.builder(
                     itemCount: studentListController.studentListRx.length,
@@ -57,6 +65,23 @@ class HomeScreen extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return CardWidget(
                           student: studentListController.studentListRx[index]);
+                    },
+                  ),
+                );
+              })
+              */
+              GetX<StateManager>(builder: (controller) {
+                return Expanded(
+                  child: GridView.builder(
+                    itemCount: controller.studentListRx.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      mainAxisSpacing: ScreenSize.screenHeight / 70,
+                      crossAxisSpacing: ScreenSize.screenHeight / 70,
+                      crossAxisCount: 2,
+                    ),
+                    itemBuilder: (context, index) {
+                      return CardWidget(
+                          student: controller.studentListRx[index]);
                     },
                   ),
                 );

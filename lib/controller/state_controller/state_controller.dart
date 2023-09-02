@@ -27,4 +27,16 @@ class StateManager extends GetxController {
     await db.updateStudent(student, id);
     getFromDb();
   }
+
+  searchHelper(String searchQuery) async {
+    final searchList = await db.getStudents();
+    final result = searchList
+        .where(
+          (student) => student.name.toLowerCase().contains(
+                searchQuery.toLowerCase(),
+              ),
+        )
+        .toList();
+    studentListRx.assignAll(result);
+  }
 }
