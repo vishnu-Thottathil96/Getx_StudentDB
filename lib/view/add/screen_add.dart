@@ -76,6 +76,12 @@ class AddScreen extends StatelessWidget {
             }
             _formKey.currentState!.save();
             if (selectedImage.isEmpty) {
+              Get.showSnackbar(const GetSnackBar(
+                title: 'Image required',
+                message: 'Please upload an image',
+                duration: Duration(seconds: 2),
+                backgroundColor: Colors.red,
+              ));
               return;
             }
             final student = StudentModel(
