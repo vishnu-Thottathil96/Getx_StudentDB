@@ -4,7 +4,7 @@ import 'package:image_picker/image_picker.dart';
 
 XFile? pickedImage;
 
-ValueNotifier<String> selectedImageNotifier = ValueNotifier('');
+String selectedImage = '';
 
 class CircleAvatarWithAddButton extends StatelessWidget {
   CircleAvatarWithAddButton({
@@ -16,24 +16,20 @@ class CircleAvatarWithAddButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        ValueListenableBuilder(
-            valueListenable: selectedImageNotifier,
-            builder: (context, value, _) {
-              return Container(
-                height: 150,
-                width: 150,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.amber,
-                    image: selectedImageNotifier.value.isEmpty
-                        ? const DecorationImage(
-                            image:
-                                AssetImage('assets/images/defaultprofile.png'),
-                            fit: BoxFit.cover)
-                        : DecorationImage(
-                            image: FileImage(File(value)), fit: BoxFit.cover)),
-              );
-            }),
+        Container(
+          height: 150,
+          width: 150,
+          decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.amber,
+              image: selectedImage.isEmpty
+                  ? const DecorationImage(
+                      image: AssetImage('assets/images/defaultprofile.png'),
+                      fit: BoxFit.cover)
+                  : DecorationImage(
+                      image: FileImage(File(selectedImage)),
+                      fit: BoxFit.cover)),
+        ),
         Positioned(
           bottom: -5,
           left: 90,
@@ -41,7 +37,7 @@ class CircleAvatarWithAddButton extends StatelessWidget {
             onPressed: () async {
               pickedImage = await _pickImage();
               if (pickedImage != null) {
-                selectedImageNotifier.value = pickedImage!.path;
+                selectedImage = pickedImage!.path;
               }
             },
             icon: const Icon(

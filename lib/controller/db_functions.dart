@@ -52,18 +52,18 @@ class DB {
     return true;
   }
 
-  Future<void> updateStudent(StudentModel student) async {
-    try {
-      await db.update(
-        'Student',
-        student.toMap(), // Assuming you have a toMap() method in StudentModel
-        where: 'id = ?',
-        whereArgs: [student.id],
-      );
-    } catch (e) {
-      print('Error updating student: $e');
-      rethrow; // Rethrow the error to handle it in the calling code
-    }
+  updateStudent(StudentModel student, int id) async {
+    await db.rawUpdate(
+        'UPDATE Student SET name = ?,batch = ?,mobile = ?,email = ?,address = ?,image = ? WHERE id = ?',
+        [
+          student.name,
+          student.batch,
+          student.phone,
+          student.mail,
+          student.address,
+          student.image,
+          id,
+        ]);
   }
 
   deleteStudent(int id) async {

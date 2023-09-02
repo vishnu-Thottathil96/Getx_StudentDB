@@ -15,7 +15,7 @@ List<String> fieldNames = [
   'Mail id',
   'Address',
 ];
-ValueNotifier<String> imageNotifier = ValueNotifier('');
+//ValueNotifier<String> imageNotifier = ValueNotifier('');
 
 class AddScreen extends StatelessWidget {
   AddScreen({Key? key}) : super(key: key);
@@ -75,7 +75,7 @@ class AddScreen extends StatelessWidget {
               return;
             }
             _formKey.currentState!.save();
-            if (selectedImageNotifier.value.isEmpty) {
+            if (selectedImage.isEmpty) {
               return;
             }
             final student = StudentModel(
@@ -84,17 +84,18 @@ class AddScreen extends StatelessWidget {
               phone: toSaveValues[2],
               mail: toSaveValues[3],
               address: toSaveValues[4],
-              image: selectedImageNotifier.value,
+              image: selectedImage,
             );
 
             await DB.instance.addStudent(student);
+            selectedImage = '';
             Get.showSnackbar(const GetSnackBar(
               title: 'Successful',
               message: 'User Registered Successfully',
               duration: Duration(seconds: 3),
               backgroundColor: Colors.green,
             ));
-            imageNotifier.value = 'assets/images/defaultprofile.png';
+            //  imageNotifier.value = 'assets/images/defaultprofile.png';
             _formKey.currentState!.reset();
             Navigator.pop(context);
           },
