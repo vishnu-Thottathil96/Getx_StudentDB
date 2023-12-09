@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
-
 import '../controller/form_validation/validator_functions.dart';
 
 class CustomTextField extends StatelessWidget {

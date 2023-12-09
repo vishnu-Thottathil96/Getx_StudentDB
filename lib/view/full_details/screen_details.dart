@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:studentdbgetx/constants/screen_size.dart';
-import 'package:studentdbgetx/controller/db_functions.dart';
+
 import 'package:studentdbgetx/model/student_model.dart';
 
 import 'package:studentdbgetx/view/full_details/widgets/second_section.dart';
